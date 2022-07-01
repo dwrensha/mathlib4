@@ -494,6 +494,7 @@
  ["docBlame", "Std.PHashSet.toList"],
  ["docBlame", "String.toAsciiByteArray.loop"],
  ["docBlame", "Subtype.simps.coe"],
+ ["docBlame", "Tactic.Alias.aliasTag"],
  ["docBlame", "Tactic.Find.«command#find_»"],
  ["docBlame", "Tactic.Find.findDeclsPerHead"],
  ["docBlame", "Tactic.Find.findType"],
