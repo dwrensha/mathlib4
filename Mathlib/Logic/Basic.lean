@@ -230,6 +230,22 @@ protected theorem Decidable.not_forall {p : α → Prop}
 
 @[simp] theorem not_forall {p : α → Prop} : (¬ ∀ x, p x) ↔ ∃ x, ¬ p x := Decidable.not_forall
 
+-- TODO: duplicate of a lemma in core
+theorem forall_true_iff : (α → True) ↔ True :=
+sorry --implies_true_iff α
+
+-- Unfortunately this causes simp to loop sometimes, so we
+-- add the 2 and 3 cases as simp lemmas instead
+theorem forall_true_iff' (h : ∀ a, p a ↔ True) : (∀ a, p a) ↔ True :=
+iff_true_intro (λ _ => of_iff_true (h _))
+
+@[simp] theorem forall_2_true_iff {β : α → Sort _} : (∀ a, β a → True) ↔ True :=
+forall_true_iff' $ λ _ => forall_true_iff
+
+@[simp] theorem forall_3_true_iff {β : α → Sort _} {γ : ∀ a, β a → Sort _} :
+  (∀ a (b : β a), γ a b → True) ↔ True :=
+forall_true_iff' $ λ _ => forall_2_true_iff
+
 alias forall_and ← forall_and_distrib
 alias exists_and_left ← exists_and_distrib_left
 alias exists_and_right ← exists_and_distrib_right
@@ -238,3 +254,15 @@ end quantifiers
 
 /-- In classical logic, we can decide a proposition. -/
 noncomputable def Classical.dec (p : Prop) : Decidable p := inferInstance
+
+/-! ### Declarations about bounded quantifiers -/
+
+section bounded_quantifiers
+
+variable {α : Sort _} {r p q : α → Prop} {P Q : ∀ x, p x → Prop} {b : Prop}
+
+theorem ball.imp_right (H: ∀ x h, (P x h → Q x h))
+  (h₁ : ∀ x h, P x h) (x h) : Q x h :=
+H _ _ $ h₁ _ _
+
+end bounded_quantifiers
